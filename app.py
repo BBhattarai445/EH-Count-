@@ -18,7 +18,11 @@ st.set_page_config(
 EXCEL_FILE = "counter.xlsx"
 BACKGROUND_IMAGE = "background.jpeg"
 st.title("EH Counter SUSMA")
-
+note = st.text_area(
+    "Number of KISSES is equal to the count number ",
+    placeholder="Type your note...",
+    height=100
+)
 # ==========================================
 # BACKGROUND IMAGE
 # ==========================================
