@@ -102,9 +102,8 @@ st.markdown(
 # NOTE - below title
 # -----------------------------
 note = st.text_area(
-    "📝 Note",
-    placeholder="Write your note here...",
-    height=80
+    "📝 Number of counters is equals to number of kiss",
+
 )
 
 
