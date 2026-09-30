@@ -17,14 +17,47 @@ st.set_page_config(
 
 EXCEL_FILE = "counter.xlsx"
 BACKGROUND_IMAGE = "background.jpeg"
-st.title("EH Counter SUSMA")
-note = st.text_area(
-    "Number of KISSES is equal to the count number ",
-    height=100
+# TITLE
+st.markdown(
+    """
+    <div style="
+        text-align: center;
+        color: white;
+        font-size: 55px;
+        font-weight: 900;
+        margin-top: 30px;
+        margin-bottom: 15px;
+    ">
+        COUNTER
+    </div>
+    """,
+    unsafe_allow_html=True
 )
-# ==========================================
-# BACKGROUND IMAGE
-# ==========================================
+
+# NOTE — directly below the title
+note = st.text_area(
+    "📝 Note",
+    placeholder="Write your note here...",
+    height=80
+)
+
+# BIG COUNT — below the note
+st.markdown(
+    f"""
+    <div style="
+        text-align: center;
+        color: white;
+        font-size: 150px;
+        font-weight: 900;
+        line-height: 1;
+        margin-top: 20px;
+        margin-bottom: 50px;
+    ">
+        {current_count}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 if os.path.exists(BACKGROUND_IMAGE):
 
