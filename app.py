@@ -111,7 +111,7 @@ st.markdown(
         margin-top: 30px;
         margin-bottom: 15px;
     ">
-        COUNTER
+        SUSMA EH COUNTER
     </div>
     """,
     unsafe_allow_html=True
