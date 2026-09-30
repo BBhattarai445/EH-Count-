@@ -17,7 +17,7 @@ st.set_page_config(
 
 EXCEL_FILE = "counter.xlsx"
 BACKGROUND_IMAGE = "background.jpeg"
-
+st.title("EH Counter SUSMA")
 
 # ==========================================
 # BACKGROUND IMAGE
