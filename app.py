@@ -1,14 +1,11 @@
 import streamlit as st
 import pandas as pd
 import os
+import base64
 from datetime import datetime
 
-# -----------------------------
-# Configuration
-# -----------------------------
-
 st.set_page_config(
-    page_title="Counter App",
+    page_title="EH Counter",
     page_icon="🔢",
     layout="centered"
 )
@@ -18,47 +15,41 @@ BACKGROUND_IMAGE = "background.jpg"
 
 
 # -----------------------------
-# Background Image
+# Background
 # -----------------------------
 
 if os.path.exists(BACKGROUND_IMAGE):
-    with open(BACKGROUND_IMAGE, "rb") as image_file:
-        import base64
 
-        encoded_image = base64.b64encode(
-            image_file.read()
-        ).decode()
+    with open(BACKGROUND_IMAGE, "rb") as f:
+        encoded = base64.b64encode(f.read()).decode()
 
     st.markdown(
         f"""
         <style>
+
         .stApp {{
-            background-image: url("data:image/jpg;base64,{encoded_image}");
+            background-image: url(
+                "data:image/jpeg;base64,{encoded}"
+            );
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }}
 
         .counter-box {{
-            background: rgba(255, 255, 255, 0.88);
-            padding: 35px;
+            background: rgba(255, 255, 255, 0.90);
+            padding: 30px;
             border-radius: 20px;
             text-align: center;
-            max-width: 500px;
-            margin: 100px auto 20px auto;
-            box-shadow: 0px 8px 30px rgba(0,0,0,0.25);
+            margin-top: 100px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
         }}
 
         .counter-number {{
             font-size: 80px;
             font-weight: bold;
-            margin: 10px;
         }}
 
-        .counter-title {{
-            font-size: 32px;
-            font-weight: bold;
-        }}
         </style>
         """,
         unsafe_allow_html=True
@@ -66,68 +57,76 @@ if os.path.exists(BACKGROUND_IMAGE):
 
 
 # -----------------------------
-# Create Excel file
+# Load Excel safely
 # -----------------------------
 
-if not os.path.exists(EXCEL_FILE):
+def load_data():
 
-    df = pd.DataFrame({
-        "Date & Time": [],
-        "Action": [],
-        "Count": []
-    })
+    if not os.path.exists(EXCEL_FILE):
+        return pd.DataFrame(
+            columns=["Date & Time", "Action", "Count"]
+        )
 
-    df.to_excel(EXCEL_FILE, index=False)
+    try:
+        return pd.read_excel(EXCEL_FILE)
+
+    except Exception:
+        # If the Excel file is corrupted/invalid,
+        # start with a fresh dataframe.
+        return pd.DataFrame(
+            columns=["Date & Time", "Action", "Count"]
+        )
+
+
+df = load_data()
 
 
 # -----------------------------
-# Read current count
+# Current count
 # -----------------------------
 
-df = pd.read_excel(EXCEL_FILE)
-
-if len(df) == 0:
+if df.empty:
     current_count = 0
 else:
     current_count = int(df.iloc[-1]["Count"])
 
 
 # -----------------------------
-# Save action to Excel
+# Save to Excel
 # -----------------------------
 
 def save_action(action, count):
 
+    global df
+
     new_row = pd.DataFrame({
-        "Date & Time": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+        "Date & Time": [
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ],
         "Action": [action],
         "Count": [count]
     })
 
-    existing_df = pd.read_excel(EXCEL_FILE)
-
-    updated_df = pd.concat(
-        [existing_df, new_row],
+    df = pd.concat(
+        [df, new_row],
         ignore_index=True
     )
 
-    updated_df.to_excel(
+    df.to_excel(
         EXCEL_FILE,
         index=False
     )
 
 
 # -----------------------------
-# Display Counter
+# Counter display
 # -----------------------------
 
 st.markdown(
     f"""
     <div class="counter-box">
 
-        <div class="counter-title">
-            🔢 Counter
-        </div>
+        <h1>🔢 Counter</h1>
 
         <div class="counter-number">
             {current_count}
@@ -139,11 +138,15 @@ st.markdown(
 )
 
 
+st.write("")
+
+
 # -----------------------------
 # Buttons
 # -----------------------------
 
 col1, col2, col3 = st.columns(3)
+
 
 with col1:
 
@@ -152,11 +155,9 @@ with col1:
         use_container_width=True
     ):
 
-        new_count = current_count - 1
-
         save_action(
             "Decrease",
-            new_count
+            current_count - 1
         )
 
         st.rerun()
@@ -184,27 +185,24 @@ with col3:
         use_container_width=True
     ):
 
-        new_count = current_count + 1
-
         save_action(
             "Increase",
-            new_count
+            current_count + 1
         )
 
         st.rerun()
 
 
 # -----------------------------
-# Show Excel Data
+# Show history
 # -----------------------------
-
-st.write("")
 
 with st.expander("📊 View saved data"):
 
-    saved_data = pd.read_excel(EXCEL_FILE)
-
-    st.dataframe(
-        saved_data,
-        use_container_width=True
-    )
+    if not df.empty:
+        st.dataframe(
+            df,
+            use_container_width=True
+        )
+    else:
+        st.info("No counter data yet.")
