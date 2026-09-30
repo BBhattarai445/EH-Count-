@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 EXCEL_FILE = "counter.xlsx"
-BACKGROUND_IMAGE = "background.jpg"
+BACKGROUND_IMAGE = "background.jpeg"
 
 
 # =========================
