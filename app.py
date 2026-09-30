@@ -20,7 +20,7 @@ BACKGROUND_IMAGE = "background.jpeg"
 st.title("EH Counter SUSMA")
 note = st.text_area(
     "Number of KISSES is equal to the count number ",
-    color: yellow;
+    color: yellow
     height=100
 )
 # ==========================================
