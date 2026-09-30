@@ -99,14 +99,6 @@ st.markdown(
 
 
 # -----------------------------
-# NOTE - below title
-# -----------------------------
-note = st.text_area(
-    "📝 Number of counters is equal to the number of kisses",
-)
-
-
-# -----------------------------
 # BIG NUMBER
 # -----------------------------
 st.markdown(
