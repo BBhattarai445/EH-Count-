@@ -1,4 +1,4 @@
-```python
+
 import streamlit as st
 import pandas as pd
 import os
@@ -259,4 +259,4 @@ with st.expander("📊 View Excel Data"):
             df,
             use_container_width=True
         )
-```
+
