@@ -11,12 +11,13 @@ st.set_page_config(
 )
 
 EXCEL_FILE = "counter.xlsx"
-BACKGROUND_IMAGE = "background.jpeg"
+BACKGROUND_IMAGE = "background.jpg"
 
 
-# -----------------------------
-# Background image
-# -----------------------------
+# =========================
+# BACKGROUND IMAGE
+# =========================
+
 if os.path.exists(BACKGROUND_IMAGE):
     with open(BACKGROUND_IMAGE, "rb") as f:
         image = base64.b64encode(f.read()).decode()
@@ -36,51 +37,70 @@ if os.path.exists(BACKGROUND_IMAGE):
     )
 
 
-# -----------------------------
-# Load Excel
-# -----------------------------
+# =========================
+# LOAD EXCEL
+# =========================
+
 def load_excel():
+
     if not os.path.exists(EXCEL_FILE):
-        return pd.DataFrame(columns=["Date & Time", "Action", "Count", "Note"])
+        return pd.DataFrame(
+            columns=["Date & Time", "Action", "Count"]
+        )
 
     try:
         return pd.read_excel(EXCEL_FILE)
+
     except Exception:
-        return pd.DataFrame(columns=["Date & Time", "Action", "Count", "Note"])
+        return pd.DataFrame(
+            columns=["Date & Time", "Action", "Count"]
+        )
 
 
 df = load_excel()
 
 
-# -----------------------------
-# Get current count
-# -----------------------------
+# =========================
+# CURRENT COUNT
+# =========================
+
 if df.empty:
     current_count = 0
 else:
     current_count = int(df.iloc[-1]["Count"])
 
 
-# -----------------------------
-# Save data to Excel
-# -----------------------------
-def save_to_excel(action, count, note=""):
+# =========================
+# SAVE TO EXCEL
+# =========================
+
+def save_to_excel(action, count):
+
     global df
 
-    new_data = pd.DataFrame({
-        "Date & Time": [datetime.now().strftime("%Y-%m-%d %H:%M:%S")],
+    new_row = pd.DataFrame({
+        "Date & Time": [
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        ],
         "Action": [action],
-        "Count": [count],
-        "Note": [note]
+        "Count": [count]
     })
 
-    df = pd.concat([df, new_data], ignore_index=True)
-    df.to_excel(EXCEL_FILE, index=False)
+    df = pd.concat(
+        [df, new_row],
+        ignore_index=True
+    )
+
+    df.to_excel(
+        EXCEL_FILE,
+        index=False
+    )
 
 
-# -----------------------------
+# =========================
 # TITLE
-# -----------------------------
+# =========================
+
 st.markdown(
     """
     <div style="
@@ -91,16 +111,17 @@ st.markdown(
         margin-top: 30px;
         margin-bottom: 15px;
     ">
-       SUSMA EH COUNTER
+        COUNTER
     </div>
     """,
     unsafe_allow_html=True
 )
 
 
-# -----------------------------
-# BIG NUMBER
-# -----------------------------
+# =========================
+# BIG COUNT
+# =========================
+
 st.markdown(
     f"""
     <div style="
@@ -119,44 +140,99 @@ st.markdown(
 )
 
 
-# -----------------------------
+# =========================
 # BUTTONS
-# -----------------------------
+# =========================
+
 col1, col2, col3 = st.columns(3)
 
+
+# DECREASE
 with col1:
-    if st.button("➖ Decrease", use_container_width=True):
+
+    if st.button(
+        "➖ Decrease",
+        use_container_width=True
+    ):
+
         new_count = current_count - 1
-        save_to_excel("Decrease", new_count, note)
+
+        save_to_excel(
+            "Decrease",
+            new_count
+        )
+
         st.rerun()
 
+
+# RESET
 with col2:
-    if st.button("🔄 Reset", use_container_width=True):
-        save_to_excel("Reset", 0, note)
+
+    if st.button(
+        "🔄 Reset",
+        use_container_width=True
+    ):
+
+        save_to_excel(
+            "Reset",
+            0
+        )
+
         st.rerun()
 
+
+# INCREASE
 with col3:
-    if st.button("➕ Increase", use_container_width=True):
+
+    if st.button(
+        "➕ Increase",
+        use_container_width=True
+    ):
+
         new_count = current_count + 1
-        save_to_excel("Increase", new_count, note)
+
+        save_to_excel(
+            "Increase",
+            new_count
+        )
+
         st.rerun()
 
 
-# -----------------------------
-# SAVE BUTTON
-# -----------------------------
+# =========================
+# SAVE CURRENT COUNT
+# =========================
+
 st.write("")
 
-if st.button("💾 SAVE CURRENT COUNT", use_container_width=True):
-    save_to_excel("Manual Save", current_count, note)
-    st.success(f"Count {current_count} and note saved! ✅")
+if st.button(
+    "💾 SAVE CURRENT COUNT",
+    use_container_width=True
+):
+
+    save_to_excel(
+        "Manual Save",
+        current_count
+    )
+
+    st.success(
+        f"Count {current_count} has been saved! ✅"
+    )
 
 
-# -----------------------------
+# =========================
 # VIEW EXCEL DATA
-# -----------------------------
+# =========================
+
 with st.expander("📊 View Excel Data"):
+
     if df.empty:
+
         st.info("No data yet.")
+
     else:
-        st.dataframe(df, use_container_width=True)
+
+        st.dataframe(
+            df,
+            use_container_width=True
+        )
