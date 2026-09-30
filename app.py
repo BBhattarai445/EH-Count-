@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("🔢 Counter App")
+st.title("🔢 susma EH counter ")
 
 # Initialize counter
 if "count" not in st.session_state:
