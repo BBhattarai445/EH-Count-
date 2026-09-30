@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 EXCEL_FILE = "counter.xlsx"
-BACKGROUND_IMAGE = "background.jpg"
+BACKGROUND_IMAGE = "background.jpeg"
 
 
 # -----------------------------
@@ -103,18 +103,28 @@ else:
 # -----------------------------
 
 st.markdown(
-    f"""
-    <div class="counter-box">
+    """
+    <style>
+    .counter-box {
+        background: rgba(255, 255, 255, 0.92);
+        padding: 40px;
+        border-radius: 25px;
+        text-align: center;
+        margin: 80px auto 20px auto;
+    }
 
-        <div class="counter-title">
-            🔢 COUNTER
-        </div>
+    .counter-title {
+        font-size: 32px;
+        font-weight: bold;
+    }
 
-        <div class="counter-number">
-            {current_count}
-        </div>
-
-    </div>
+    .counter-number {
+        font-size: 110px;
+        font-weight: 900;
+        line-height: 1;
+        margin: 20px 0;
+    }
+    </style>
     """,
     unsafe_allow_html=True
 )
