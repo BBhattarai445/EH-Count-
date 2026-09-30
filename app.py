@@ -141,29 +141,22 @@ def save_to_excel(action, count):
 # DISPLAY COUNTER
 # ==========================================
 
+# ==========================================
+# DISPLAY BIG COUNTER NUMBER
+# ==========================================
+
 st.markdown(
-    """
-    <style>
-    .counter-box {
-        background: rgba(255, 255, 255, 0.92);
-        padding: 40px;
-        border-radius: 25px;
+    f"""
+    <div style="
         text-align: center;
-        margin: 80px auto 20px auto;
-    }
-
-    .counter-title {
-        font-size: 32px;
-        font-weight: bold;
-    }
-
-    .counter-number {
-        font-size: 110px;
+        font-size: 150px;
         font-weight: 900;
         line-height: 1;
-        margin: 20px 0;
-    }
-    </style>
+        margin-top: 100px;
+        margin-bottom: 50px;
+    ">
+        {current_count}
+    </div>
     """,
     unsafe_allow_html=True
 )
